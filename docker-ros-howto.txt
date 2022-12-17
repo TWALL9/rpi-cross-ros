@@ -1,0 +1,12 @@
+docker run --privileged --rm tonistiigi/binfmt --install arm64
+
+docker buildx build --platform=linux/arm64,linux/amd64 -f Dockerfile -t twallis/ros:build-setup --load .
+
+docker volume create simplevol
+
+docker run -it --name=rpi-ros-build --platform=linux/arm64 -v simplevol:/ros_tutorial/install -v /home/tom/devel/ros_tutorial:/ros_tutorial twallis/ros:build-setup
+
+docker cp rpi-ros-build:/ros_tutorial/install .
+
+rsync -avz install <username>@<hostname>:/home/username/ws_name/install
+
